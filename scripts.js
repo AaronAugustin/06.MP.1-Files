@@ -9,9 +9,9 @@ function getVideo() {
     navigator.mediaDevices.getUserMedia({video: true, audio: false})
     .then((stream) => {
         var videoTracks = stream.getVideoTracks();
-        console.log(localMediaStream); // <-- accesses the user so we can use it on the page
+        console.log(stream); // <-- accesses the user so we can use it on the page
 
-        video.srcObject = localMediaStream;
+        video.srcObject = stream;
         video.play();
     })
 
@@ -22,7 +22,7 @@ function getVideo() {
 
 function paintToCanvas() {
     var width = video.videoWidth;
-    var height = video.height;
+    var height = video.videoHeight;
 
     canvas.width = width;
     canvas.height = height;
@@ -38,8 +38,8 @@ function paintToCanvas() {
 }
 
 function takePhoto() {
-    snap.currentTime = 0;
-    snap.play();
+    audio.currentTime = 0;
+    audio.play();
 
     var data = canvas.toDataURL('image/jepg');
     var link = document.createElement('a');

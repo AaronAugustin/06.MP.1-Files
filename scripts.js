@@ -27,7 +27,7 @@ function paintToCanvas() {
     canvas.width = width;
     canvas.height = height;
 
-    return setInterval(() =>{
+    return setInterval(() => {
         ctx.drawImage(video, 0, 0, width, height);
 
         var pixels = ctx.getImageData(0, 0, width, height);
@@ -41,8 +41,8 @@ function takePhoto() {
     snap.currentTime = 0;
     snap.play();
 
-    var data = canvas.toDataURL('');
-    var link = document.createElement('');
+    var data = canvas.toDataURL('image/jepg');
+    var link = document.createElement('a');
 
     link.href = data;
     link.setAttribute('download', 'handsome');
@@ -53,46 +53,23 @@ function takePhoto() {
 
 function redEffect(pixels) {
     for (let i = 0; i < pixels.data.length; i += 4) {
-        pixels.data[i + 0] = pixels.data[i + 0] + 200; // <-- red
-        pixels.data[i + 1] = pixels.data[i + 1] - 50; // <-- green
-        pixels.data[i + 2] = pixels.data[i + 2] * 0.5;// <-- blue
+        pixels.data[i + 0] = pixels.data[i + 0] + 200;
+        pixels.data[i + 1] = pixels.data[i + 1] - 50;
+        pixels.data[i + 2] = pixels.data[i + 2] * 0.5;
     }
 
     return pixels;
 }
 
 function rgbSplit(pixels) {
-    for (let i = 0; i < pixels.data.length; i += 4) {
-      pixels.data[i - 150] = pixels.data[i + 0];  // <-- red
-      pixels.data[i + 500] = pixels.data[i + 1];  // <-- green
-      pixels.data[i - 550] = pixels.data[i + 2];  // <-- blue
+    for (let i = 0; i < pixels.data.length; i+=4) {
+      pixels.data[i - 150] = pixels.data[i + 0];
+      pixels.data[i + 500] = pixels.data[i + 1];
+      pixels.data[i - 550] = pixels.data[i + 2];
     }
 
     return pixels;
 }
-
-function greenScreen() {
-    var levels = {};
-
-    document.querySelectorAll('.rgb input').forEach((input) => {
-        levels[input.name] = input.value;
-    });
-
-    for (i = 0; i < pixels.data.length; i = i + 4) {
-        red = pixels.data[i + 0];
-        green = pixels.data[i + 1];
-        blue = pixels.data[i + 2];
-        alpha = pixels.data[i + 3];
-
-        /**
-        *  im so sorry for these if conditions
-        *  yandre dev moment
-        */
-        if (red >= levels.rmin && green >= levels.gmin && blue >= levels.bmin && red <= levels.rmax && green <= levels.gmax && blue <= levels.bmax) {
-            // take it out!!!
-            pixels.data[i + 3] = 0;
-        }
-    }
-
-    return pixels;
-}
+   
+getVideo();
+video.addEventListener("canplay", paintToCanvas);
